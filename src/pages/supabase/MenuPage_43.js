@@ -1,24 +1,35 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+
+import MenuProducts_43 from "../../components/MenuProducts_43";
+
+const base_url = `https://dmnkstwjwvywbbjpyytg.supabase.co/rest/v1/menu_xx?select=*`
+
+let url = `${base_url}`;
+
+const options = {
+  method: 'GET',
+  headers: {
+    apikey: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtbmtzdHdqd3Z5d2JianB5eXRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzY0NjE0ODEsImV4cCI6MTk5MjAzNzQ4MX0.oSfa-8h3DQLfrLXOZ_E1-XmMwuKP62tbMDQCZ9GU9RQ`,
+    Authorization: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtbmtzdHdqd3Z5d2JianB5eXRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzY0NjE0ODEsImV4cCI6MTk5MjAzNzQ4MX0.oSfa-8h3DQLfrLXOZ_E1-XmMwuKP62tbMDQCZ9GU9RQ`
+  }
+};
 
 const MenuPage_43 = () => {
   const [products, setProducts] = useState([]);
-  const navigate = useNavigate();
 
-  const changeFilter = (filter = '') => {
-    navigate(`/supa_menu_43/${filter}`);
+  const changeFilter = (filter) => {
+    if (filter === 'all') {
+      url = `${base_url}`;
+    }else {
+      url = `${base_url}&category=eq.${filter}`;
+    }
+    getMenuData_43(filter);
 }
 
-  const getMenuData_43 = async () => {
-    const response = await fetch(`https://dmnkstwjwvywbbjpyytg.supabase.co/rest/v1/menu_xx?select=*`, {
-      method: 'GET',
-      headers: {
-        apikey: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtbmtzdHdqd3Z5d2JianB5eXRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzY0NjE0ODEsImV4cCI6MTk5MjAzNzQ4MX0.oSfa-8h3DQLfrLXOZ_E1-XmMwuKP62tbMDQCZ9GU9RQ`,
-        Authorization: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtbmtzdHdqd3Z5d2JianB5eXRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzY0NjE0ODEsImV4cCI6MTk5MjAzNzQ4MX0.oSfa-8h3DQLfrLXOZ_E1-XmMwuKP62tbMDQCZ9GU9RQ`
-      }
-    });
+  const getMenuData_43 = async (filter = 'all') => {
+    const response = await fetch(url, options);
     const data = await response.json();
-    console.log('menu data', data);
+    console.log(`${filter} data`, data);
     setProducts(data);
   }
 
@@ -45,27 +56,7 @@ const MenuPage_43 = () => {
                             shakes
                         </button>
                     </div>
-
-
-          <div className="section-center">
-            { products.map((product) => {
-              const {id, img, price, title, descrip} = product;
-              return(
-                <article className="menu-item" key={id}>
-                          <img src={img} alt="eggs" className="photo" />
-                          <div className="item-info">
-                            <header>
-                              <h4>{title}</h4>
-                              <h4 className="price">{price}</h4>
-                            </header>
-                            <p className="item-text">
-                              {descrip}
-                            </p>
-                          </div>
-                        </article>
-              )      
-            }) }
-          </div>
+                    <MenuProducts_43 products={products}/>
         </section>
       </div>
     </section>
