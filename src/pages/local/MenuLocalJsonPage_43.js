@@ -35,7 +35,7 @@ const MenuLocalJsonPage_43 = () => {
       <div className="section-center">
         <section className="menu">
           <div className="title">
-            <h2>Menu from LocalJson Server</h2>
+            <h2>Menu from LocalJsons Server</h2>
             <h3>Kay_Yang, 210410543</h3>
             <div className="underline"></div>
           </div>
